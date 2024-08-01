@@ -1,7 +1,17 @@
 from unittest.mock import mock_open, patch
+import pytest
+from datetime import datetime as dt
 
-from src.utils import (currency_rate, filter_by_date, get_currency_stock_data, get_data, greeting, last_digit_card,
-                       payment_amount, stock_prices)
+from src.utils import (
+    currency_rate,
+    filter_by_date,
+    get_currency_stock_data,
+    get_data,
+    greeting,
+    last_digit_card,
+    payment_amount,
+    stock_prices,
+)
 
 
 @patch("pandas.read_excel")
@@ -43,9 +53,18 @@ def test_get_data(mock_xlsx):
     }
 
 
-def test_greeting(date):
+@pytest.mark.parametrize(
+    "date, test_greeting",
+    [
+        (dt.strptime("2018-07-11T02:26:18.671407", "%Y-%m-%dT%H:%M:%S.%f"), "Доброй ночи"),
+        (dt.strptime("2018-07-11T07:26:18.671407", "%Y-%m-%dT%H:%M:%S.%f"), "Доброе утро"),
+        (dt.strptime("2018-07-11T14:26:18.671407", "%Y-%m-%dT%H:%M:%S.%f"), "Добрый день"),
+        (dt.strptime("2018-07-11T20:26:18.671407", "%Y-%m-%dT%H:%M:%S.%f"), "Добрый вечер"),
+    ],
+)
+def test_greeting(date, test_greeting):
     """Тестирует приветсвие в зависимости от времени дня"""
-    assert greeting(date=date) == "Доброй ночи"
+    assert greeting(date=date) == test_greeting
 
 
 def test_filter_by_date(data):

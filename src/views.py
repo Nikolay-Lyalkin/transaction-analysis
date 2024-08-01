@@ -2,10 +2,17 @@ import json
 from datetime import datetime as dt
 from typing import Any
 
-from src.services import analysis_categories_of_csshback, categories_in_data
-from src.services import filter_by_date as f_b_d
-from src.utils import (currency_rate, filter_by_date, get_currency_stock_data, get_data, greeting, last_digit_card,
-                       payment_amount, stock_prices, top_transactions)
+from src.utils import (
+    currency_rate,
+    filter_by_date,
+    get_currency_stock_data,
+    get_data,
+    greeting,
+    last_digit_card,
+    payment_amount,
+    stock_prices,
+    top_transactions,
+)
 
 
 def main_page(date: str) -> Any:
@@ -51,27 +58,3 @@ def main_page(date: str) -> Any:
     ) as f_obj:
         json.dump(result, f_obj, ensure_ascii=False)
     return result
-
-
-def services_page() -> Any:
-    """Страница сервисы"""
-    # Получение данных о транзациях в формате list[dict]
-    data = get_data("C:/Users/sereg/OneDrive/Рабочий стол/transaction-analysis/data/operations.xlsx")
-
-    # Принимает данные об операциях и возвращает категории
-    categories = categories_in_data(data)
-
-    # Принимает на вход с данными об операциях, обрабатывает пользовотельский ввод даты и возвращает отсортированные
-    # данные по дате за указанный месяц
-    filter_data_by_date = f_b_d(data)
-
-    # Принимает на вход данные об операциях и категории, возвращает словарь с наиболее выгодными категориями для
-    # кэшбэка в данно месяце
-    top_categories_of_csshback = analysis_categories_of_csshback(filter_data_by_date, categories)
-
-    with open(
-        "C:/Users/sereg/OneDrive/Рабочий стол/transaction-analysis/data/services_page.json", "w", encoding="utf-8"
-    ) as f_obj:
-        json.dump(top_categories_of_csshback, f_obj, ensure_ascii=False)
-
-    return top_categories_of_csshback

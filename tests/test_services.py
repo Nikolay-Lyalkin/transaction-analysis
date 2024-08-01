@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from src.services import analysis_categories_of_csshback, categories_in_data, filter_by_date
+from src.services import analysis_categories_of_cashback, categories_in_data, filter_by_date
 
 
 def test_categories_in_data(data):
@@ -8,9 +8,9 @@ def test_categories_in_data(data):
     assert categories_in_data(data) == ["Дом и ремонт", "Переводы"]
 
 
-def test_analysis_categories_of_csshback(data):
+def test_analysis_categories_of_cashback(data):
     """"""
-    assert analysis_categories_of_csshback(data, ["Дом и ремонт", "Переводы"]) == {
+    assert analysis_categories_of_cashback(data, ["Дом и ремонт", "Переводы"]) == {
         "Дом и ремонт": 0.25,
         "Переводы": 3.05,
     }

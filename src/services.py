@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime as dt
+import json
 
 filepath_logger = "C:\\Users\\sereg\\OneDrive\\Рабочий стол\\transaction-analysis\\logs\\utils.log"
 logger = logging.getLogger("utils")
@@ -36,15 +37,22 @@ def filter_by_date(data_operations: list[dict]) -> list[dict]:
     return data_filter_by_date
 
 
-def analysis_categories_of_csshback(data: list[dict], categories: list) -> dict[str, float]:
+def analysis_categories_of_cashback(data: list[dict], categories: list) -> dict[str, float]:
     """Принимает на вход данные об операциях и категории, возвращает словарь с наиболее выгодными категориями\
      для кэшбэка"""
-    top_categories_csshback = {}
+    top_categories_cashback = {}
     for i in range(0, len(categories)):
         amount = 0
         for d in data:
             if categories[i] == d["Категория"]:
                 amount += d["Сумма операции с округлением"]
-                top_categories_csshback[f"{categories[i]}"] = round(amount / 100, 2)
-    top_categories_csshback = dict(sorted(top_categories_csshback.items(), key=lambda x: x[1], reverse=True))
-    return top_categories_csshback
+                top_categories_cashback[f"{categories[i]}"] = round(amount / 100, 2)
+    top_categories_cashback = dict(sorted(top_categories_cashback.items(), key=lambda x: x[1], reverse=True))
+    return top_categories_cashback
+
+
+def services_page(top_categories_cashback: dict) -> dict:
+    with open(
+        "C:/Users/sereg/OneDrive/Рабочий стол/transaction-analysis/data/services_page.json", "w", encoding="utf-8"
+    ) as f_obj:
+        json.dump(top_categories_cashback, f_obj, ensure_ascii=False)
